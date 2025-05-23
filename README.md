@@ -1,4 +1,5 @@
-# My Gitbook
-Link to my Gitbook. I plan to migrate the Gitbook code itself from Gitlab in the future.
+# Intro
 
-https://antonioluc93.gitbook.io/
+My personal bible for Pentesting, Red Teaming and other Cyber Security fields.
+
+Lots of examples and references included.
