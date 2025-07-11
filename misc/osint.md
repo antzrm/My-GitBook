@@ -20,6 +20,10 @@ In-depth attack surface mapping and asset discovery
 
 [https://github.com/owasp-amass/amass](https://github.com/owasp-amass/amass)
 
+## Seeker (find exact location of a phone using phishing site like WhatsApp fake web)
+
+[https://github.com/thewhiteh4t/seeker](https://github.com/thewhiteh4t/seeker)
+
 ## CTFR
 
 Abusing Certificate Transparency logs for getting HTTPS websites subdomains.

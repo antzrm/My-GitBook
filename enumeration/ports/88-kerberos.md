@@ -195,6 +195,12 @@ Among several tools, **Rubeus** is easier to use because it automatically finds 
 {% endtab %}
 {% endtabs %}
 
+### Timeroasting
+
+[https://github.com/SecuraBV/Timeroast/blob/main/timeroast.ps1](https://github.com/SecuraBV/Timeroast/blob/main/timeroast.ps1)
+
+[https://medium.com/@offsecdeer/targeted-timeroasting-stealing-user-hashes-with-ntp-b75c1f71b9ac](https://medium.com/@offsecdeer/targeted-timeroasting-stealing-user-hashes-with-ntp-b75c1f71b9ac)
+
 ## Tickets
 
 [#tickets](../../post-exploitation/windows/ad/authentication.md#tickets "mention")

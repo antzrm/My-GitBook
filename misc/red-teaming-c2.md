@@ -1,4 +1,8 @@
-# Red Teaming
+# Red Teaming / C2
+
+## Havoc
+
+[https://medium.com/@sam.rothlisberger/havoc-c2-with-av-edr-bypass-methods-in-2024-part-1-733d423fc67b](https://medium.com/@sam.rothlisberger/havoc-c2-with-av-edr-bypass-methods-in-2024-part-1-733d423fc67b)
 
 ## Phishing
 

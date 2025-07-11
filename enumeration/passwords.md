@@ -55,9 +55,13 @@ WHATEVER:(blank)
 * The current month followed by the current year (MonthYear). For example, **November2020**, **March2021**, etc.
 * Using the company name along with random numbers (CompanyNameNumbers). For example, TryHackMe01, TryHackMe02.
 
-## Username Wordlists
+## Wordlists
 
-[https://github.com/funkandwagnalls/pythonpentest/blob/master/username\_generator.py](https://github.com/funkandwagnalls/pythonpentest/blob/master/username_generator.py)
+```bash
+https://github.com/clem9669/wordlists
+# Usernames
+https://github.com/funkandwagnalls/pythonpentest/blob/master/username_generator.py
+```
 
 ## Hydra
 
@@ -94,6 +98,7 @@ hashcat.exe -m 1800 -a 0 -o cracked.txt hash.txt rockyou.txt # sha512
 # -m hash type (MD5, sha1...) -a 0 --> dict attack -o outputfile once cracked
 
 # HASHCAT RULES
+https://github.com/clem9669/hashcat-rule
 https://hashcat.net/wiki/doku.php?id=rule_based_attack
 # Good option to use rules (change the wordlist since rockyou with rules might be huge):
 hashcat -m 13100 crack.txt /usr/share/wordlists/rockyou.txt /usr/share/hashcat/rules/InsidePro-PasswordsPro.rule -O

@@ -97,6 +97,7 @@
   * [WebSocket](enumeration/web-pentesting/websocket.md)
   * [Web Cache Deception](enumeration/web-pentesting/web-cache-deception.md)
   * [SOAP](enumeration/web-pentesting/soap.md)
+  * [LLM / AI](enumeration/web-pentesting/llm-ai.md)
   * [Others](enumeration/web-pentesting/others.md)
 * [Web Technologies](enumeration/web-technologies/README.md)
   * [Wordpress](enumeration/web-technologies/wordpress.md)
@@ -182,7 +183,7 @@
 * [Malware Analysis](misc/malware-analysis.md)
 * [Anti-forensics](misc/anti-forensics.md)
 * [Curso s4vitar](misc/curso-s4vitar.md)
-* [Red Teaming](misc/red-teaming.md)
+* [Red Teaming / C2](misc/red-teaming-c2.md)
 * [Forensics / Incident Response](misc/forensics-incident-response.md)
 * [DevOps](misc/devops.md)
 * [Bug Bounty](misc/bug-bounty.md)
@@ -191,6 +192,7 @@
 ## Tools
 
 * [Burp Suite](tools/burp-suite.md)
+* [NetExec](tools/netexec.md)
 * [Metasploit](tools/metasploit.md)
 * [C2 (Command & Control)](tools/empire.md)
 * [OWASP ZAP](tools/owasp-zap.md)

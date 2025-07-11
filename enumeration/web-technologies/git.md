@@ -3,6 +3,7 @@
 {% code overflow="wrap" fullWidth="true" %}
 ```bash
 https://eagain.net/articles/git-for-computer-scientists/
+Git https://octobot.medium.com/how-git-internally-works-1f0932067bee
 
 # ALWAYS CHECK 
 HEAD 
@@ -41,7 +42,7 @@ git --git-dir /path/to/.git log --stat
 # Compare the two commits
 git diff
 git diff --staged
-git diff --cached
+git diff --cached $FILEPATH
 
 # Working tree status
 git status
@@ -59,15 +60,15 @@ git push -u origin master # push changes to remote repository (master branch)
 
 ## Github, .git secrets
 
-| [https://www.puckiestyle.nl/source-code-disclosure-via-exposed-git-folder/](https://www.puckiestyle.nl/source-code-disclosure-via-exposed-git-folder/) |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [https://github.com/internetwache/GitTools](https://github.com/internetwache/GitTools)                                                                 |
-
 GitGuardian Trufflehog Shhgit gitLeaks Gitrob
 
 ### GitTools
 
-<pre class="language-bash" data-overflow="wrap" data-full-width="true"><code class="lang-bash">Use https://github.com/arthaud/git-dumper, more up to date
+<pre class="language-bash" data-overflow="wrap" data-full-width="true"><code class="lang-bash">https://github.com/lijiejie/GitHack
+https://github.com/arthaud/git-dumper
+https://www.puckiestyle.nl/source-code-disclosure-via-exposed-git-folder/
+https://github.com/internetwache/GitTools
+
 NOTE: Always check Docker files and remember their info
 <strong>
 </strong><strong># Dumper can be used to download an exposed .git directory from a website 

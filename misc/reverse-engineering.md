@@ -2,9 +2,15 @@
 
 
 
-{% embed url="https://github.com/mandiant/flare-floss" %}
+Resources
 
-{% embed url="https://x64dbg.com/" %}
+```
+https://any.run/cybersecurity-blog/reverse-engineering-snake-keylogger/
+https://any.run/cybersecurity-blog/net-malware-obfuscators-analysis-part-one/
+https://github.com/mandiant/flare-floss
+https://x64dbg.com/
+https://pwnable.tw/
+```
 
 ```bash
 └─$ strings heedv1\ Setup\ 1.0.0.exe -n 12 | sort -u | grep 'http'
@@ -76,9 +82,11 @@ xxd file
 00002080: 4865 7265 2069 7320 6372 6564 7320 2100  Here is creds !.
 ```
 
-### gHidra
+### gHidra (with AI)
 
 ```
+https://github.com/LaurieWired/GhidraMCP
+
 File > New Project
 File > Import file
 Drag the binary to the dragon icon

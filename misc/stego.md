@@ -1,10 +1,15 @@
 # Stego
 
-{% embed url="https://book.hacktricks.xyz/stego/stego-tricks" %}
 
-{% embed url="https://0xrick.github.io/lists/stego" %}
 
-{% embed url="https://github.com/RickdeJager/stegseek" %}
+## Resources / Tricks
+
+```
+https://book.hacktricks.wiki/en/crypto-and-stego/stego-tricks.html#stego-tricks
+https://0xrick.github.io/lists/stego/
+https://github.com/ccyl13/StegAnalyzer
+https://github.com/RickdeJager/stegseek
+```
 
 ## Excel to txt
 

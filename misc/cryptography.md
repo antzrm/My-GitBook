@@ -177,6 +177,10 @@ apt install bruteforce-salted-openssl
 Alternative: openssl2john  
 ```
 
+## ECC attacks (eliptic curves)
+
+[https://github.com/elikaski/ECC\_Attacks?tab=readme-ov-file#ECC-Attacks](https://github.com/elikaski/ECC_Attacks?tab=readme-ov-file#ECC-Attacks)
+
 ## EFS - Windows
 
 ```bash

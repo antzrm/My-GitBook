@@ -12,6 +12,10 @@
 
 `unix2dos`
 
+## TOCTOU (Time-of-check-time-of-use)
+
+If I can run a command between the time that it checks the target of the link and when it prints the contents of the file, I can change the target of the link.
+
 ## Go
 
 ```go
