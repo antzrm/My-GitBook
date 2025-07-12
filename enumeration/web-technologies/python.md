@@ -59,6 +59,28 @@ Create **venv**, activate and then git clone repos and python setup install or p
 
 ## Compatibility / Virtual environment
 
+uv
+
+{% code fullWidth="true" %}
+```bash
+https://github.com/astral-sh/uv
+https://www.youtube.com/watch?v=G36QXtBXKBQ
+
+oxdf@hacky$ git clone https://github.com/ShutdownRepo/targetedKerberoast.git
+Cloning into 'targetedKerberoast'...
+remote: Enumerating objects: 65, done.
+remote: Counting objects: 100% (22/22), done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 65 (delta 14), reused 12 (delta 12), pack-reused 43 (from 1)
+Receiving objects: 100% (65/65), 238.08 KiB | 7.21 MiB/s, done.
+Resolving deltas: 100% (25/25), done.
+oxdf@hacky$ cd targetedKerberoast/
+oxdf@hacky$ uv add --script targetedKerberoast.py -r requirements.txt 
+Updated `targetedKerberoast.py`
+oxdf@hacky$ uv run targetedKerberoast.py -v -d 'domain.com' -u $USER -p $PASS
+```
+{% endcode %}
+
 {% code overflow="wrap" fullWidth="true" %}
 ```bash
 https://www.kali.org/docs/general-use/using-eol-python-versions/
