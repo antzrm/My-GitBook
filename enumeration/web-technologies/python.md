@@ -119,6 +119,23 @@ https://pypi.org/project/autopep8/
 autopep8 script.py good-script.py
 ```
 
+## Open server locally
+
+```python
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind(("0.0.0.0", 80))
+    sock.listen(1)
+    conn, addr = sock.accept()
+    with conn:
+        req = b""
+        while True:
+            chunk = conn.recv(4096)
+            if not chunk:
+                break
+            req += chunk
+```
+
 ## **HTTP(S) Server**
 
 [**https://pypi.org/project/uploadserver/**](https://pypi.org/project/uploadserver/)
