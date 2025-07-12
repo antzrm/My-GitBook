@@ -207,6 +207,19 @@ Among several tools, **Rubeus** is easier to use because it automatically finds 
 
 [#tickets](../../post-exploitation/windows/ad/persistence.md#tickets "mention")
 
+### Create a ticket
+
+```bash
+KRB5CCNAME=user.ccache python3 targetedKerberoast.py ...
+
+# CREATE TICKET (ONLY WORKS W/ PASSWORD AND NOT HASH??)
+kinit $USER
+Password for user@dom.com: 
+klist
+...Ticket cache: FILE:/tmp/krb5cc_1000
+# Then the authentication
+```
+
 ### Pass the Ticket
 
 [https://www.thehacker.recipes/ad/movement/kerberos/ptt](https://www.thehacker.recipes/ad/movement/kerberos/ptt)

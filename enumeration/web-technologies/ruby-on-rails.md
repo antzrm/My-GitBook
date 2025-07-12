@@ -1,6 +1,8 @@
 # Ruby on Rails
 
-##
+
+
+[https://guides.rubyonrails.org/configuring.html](https://guides.rubyonrails.org/configuring.html)
 
 [https://cheatsheetseries.owasp.org/cheatsheets/Ruby\_on\_Rails\_Cheat\_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html)
 

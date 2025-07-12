@@ -2,6 +2,8 @@
 
 <pre class="language-sql"><code class="lang-sql">sqlite3 $DATABASE
 
+sqlite> .headers on
+
 sqlite> .tables
         PRAGMA table_info($TABLE); # describe a table
 <strong>select * from user;

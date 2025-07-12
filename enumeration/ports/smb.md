@@ -78,9 +78,9 @@ smbmap -H $IP -r $SHARE # List recursively the content of a share
 smbmap -H 10.10.10.10 -u invaliduser # guest smb session
 smbmap -H 10.10.10.10 -d domain.com -u USER -p PASS
 
-# Spider shares and measure how long it takes for testing purposes
-time cme smb $IP -u $USER -p $PASS --shares -M spider_plus
-cat .json | jq '. | map_values(keys)'
+# SPIDER SHARES
+nxc smb $IP -u $USER -p $PASSWORD -M spider_plus -o EXCLUDE_FILTER='print$,NETLOGON,ipc$'
+cat spider_plus.json | jq '. | map_values(keys)'
 
 # SAMBA CONNECTION TO A SHARE 
 smbclient -L $IP -U "user%pass"
