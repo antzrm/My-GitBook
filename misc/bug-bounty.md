@@ -1,5 +1,22 @@
 # Bug Bounty
 
+
+
+## Tips
+
+* Target VDPs before Bug Bounties
+* Break down complet concepts into manageable pieces and fill the gaps of knowledge
+
+## HackingHub
+
+&#x20;[https://app.hackinghub.io/hubs](https://app.hackinghub.io/hubs)
+
+[https://hackerone.com/hacktivity/](https://hackerone.com/hacktivity/)
+
+[https://www.nahamsec.com/posts](https://www.nahamsec.com/posts)
+
+[https://samcurry.net/](https://samcurry.net/)
+
 ## Best Tools
 
 #### NMap -
@@ -9,6 +26,13 @@
 #### Masscan -
 
 [github.com/robertdavidgraham/masscan](https://github.com/robertdavidgraham/masscan)
+
+**subfinder (Subdomains)**
+
+```bash
+subfinder -d domain.com -silent -all
+subfinder -d domain.com -silent -all | httpx
+```
 
 #### Naabu -
 

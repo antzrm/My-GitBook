@@ -38,6 +38,10 @@ Option 1-> Go to Administration Templates > edit index.php and place our PHP cod
 Option 2 -> Go to Site Templates -> modify error.php instead of index.php (with index we could break the site)
 Option 3 -> Upload vuln plugin https://github.com/p0dalirius/Joomla-webshell-plugin
 https://vulncheck.com/blog/joomla-for-rce
+# WEBSHELL PLUGIN RCE
+https://github.com/p0dalirius/Joomla-webshell-plugin
+https://docs.joomla.org/J4.x:Creating_a_Plugin_for_Joomla
+https://youtu.be/sdF8YSPHql4?t=259
 
 # ALTERNATIVE: create new PHP file and then go to (in case Protostar template) /templates/protostar/webshell.php
 

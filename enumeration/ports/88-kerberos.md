@@ -430,6 +430,7 @@ https://beta.hackndo.com/unconstrained-delegation-attack/
 https://beta.hackndo.com/resource-based-constrained-delegation-attack/
 https://blog.harmj0y.net/activedirectory/s4u2pwnage/
 https://eladshamir.com/2019/01/28/Wagging-the-Dog.html
+https://github.com/TheManticoreProject/Delegations
 ```
 
 {% hint style="info" %}

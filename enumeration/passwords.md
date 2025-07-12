@@ -10,6 +10,10 @@ For web applications, always consider as users both "admin" and otherwise also "
 **hashcat** > Retry without -O since that is discarding longer passwords
 {% endhint %}
 
+## Collection of password lists
+
+[https://weakpass.com/](https://weakpass.com/)
+
 ## Online Hash Crack
 
 {% hint style="info" %}
