@@ -18,6 +18,26 @@ If I can run a command between the time that it checks the target of the link an
 
 ## Go
 
+### asdf (Go version manager)
+
+{% code overflow="wrap" fullWidth="true" %}
+```
+- Download binary from Github releases and put it in ~/.local/bin
+
+- Add this to ~/.zshrc
+if command -v asdf &>/dev/null; then                                                                                                                                         
+  eval "$(asdf env setup)"                                                                                                                                                   
+fi                                                                                                                                                                           
+                                                                                                                                                                             
+export PATH="$HOME/.asdf/shims:$PATH"                                                                                                                                        
+export PATH="$(asdf where golang)/bin:$PATH"
+
+- Then install golang
+asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
+asdf install golang latest
+```
+{% endcode %}
+
 ```go
 export GOROOT=/usr/lib/go
 go build

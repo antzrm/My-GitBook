@@ -131,6 +131,7 @@
   * [Microsoft Office](enumeration/other-technologies/microsoft-office.md)
   * [Inspect code / Debugger](enumeration/other-technologies/inspect-code-debugger.md)
   * [Cloud](enumeration/other-technologies/cloud.md)
+  * [GLPI](enumeration/other-technologies/glpi.md)
 * [Password cracking](enumeration/passwords.md)
 * [Packet sniffing](enumeration/packet-sniffing.md)
 

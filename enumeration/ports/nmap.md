@@ -51,6 +51,12 @@ sudo nmap -sUCV -p$PORT $IP
 sudo nmap -sU $box   # -sU scans the top 1000 UDP ports. 
 ```
 
+## IPv6 scan
+
+```bash
+sudo nmap -6 -sS --min-rate 2000 -p- -Pn -n -v dead:beef::1001 -oG allPorts
+```
+
 ## Vuln scan
 
 ```bash

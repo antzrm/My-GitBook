@@ -302,6 +302,12 @@ Let's talk blue team and how to mitigate these types of attacks.&#x20;
 {% endtab %}
 {% endtabs %}
 
+### PassTheCert
+
+[https://offsec.almond.consulting/authenticating-with-certificates-when-pkinit-is-not-supported.html](https://offsec.almond.consulting/authenticating-with-certificates-when-pkinit-is-not-supported.html)
+
+[https://github.com/AlmondOffSec/PassTheCert/tree/main/Python](https://github.com/AlmondOffSec/PassTheCert/tree/main/Python)
+
 ### Golden Tickets
 
 {% hint style="info" %}
@@ -626,6 +632,22 @@ addcomputer.py -computer-name 'rbcd$' -computer-pass 'rbcdpass' -dc-host kingsla
     https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse
     https://ppn.snovvcrash.rocks/pentest/infrastructure/ad/delegation-abuse
     Charlie’s talk about delegation : https://www.thehacker.recipes/ad/movement/kerberos/delegations#talk
+```
+{% endcode %}
+
+## Machine account to Domain Admin (Silver Ticket)???
+
+A machine account isn’t automatically an administrator on the server it’s linked to. However, I can leverage how Kerberos works to escalate to Administrator.
+
+During a service ticket request, the service ticket is encrypted by the KDC using the key (NT hash) of the account running the service (the machine account). This allows only the service account to decrypt the ticket and authorize access.
+
+I extracted the password hash of the service account CISRVPGLPI01$. With this, I can forge a service ticket by crafting the ticket’s content to gain access to the service without contacting the KDC. This forged ticket is known as a Silver Ticket.
+
+It’s possible to create a Silver Ticket on Linux using Impacket’s ticketer.py tool.
+
+{% code overflow="wrap" fullWidth="true" %}
+```bash
+ticketer.py -nthash b038f001e59a26d243f13479a2bf2893 -domain-sid S-1-5-21-578904490-1941284195-2359538415 -domain citadelle.ci -spn CIFS/CISRVPGLPI01.citadelle.ci Administrator -user-id 500
 ```
 {% endcode %}
 

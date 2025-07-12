@@ -71,6 +71,12 @@ john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa.john #get passphrase
 sshpass -P 'password' user@target
 ```
 
+## RSA / Retrieve private key from weak public key
+
+RSA attack tool (mainly for CTF) - retrieve private key from weak public key and/or uncipher data
+
+[https://github.com/RsaCtfTool/RsaCtfTool](https://github.com/RsaCtfTool/RsaCtfTool)
+
 ## Brute force old SSH/web with patator
 
 {% code overflow="wrap" fullWidth="true" %}

