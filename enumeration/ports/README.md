@@ -35,6 +35,14 @@ Test-NetConnection -Port 445 192.168.50.151
 
 $ipAddress = "127.0.0.1"; Get-Content "ports.txt" | ForEach-Object {if ((New-Object System.Net.Sockets.TcpClient).Connect($ipAddress, $_)) { "Port $_ is open." } else { "Port $_ is closed." }}
 
+
+######################## INVOKE-PORTSCAN (TWO VERSIONS) ###########################
+PowerShell Invoke-Portscan -StartAddress 172.16.249.1 -EndAddress 172.16.249.255 -Ports 22 -Threads 30 | Where { $_.Alive -eq "True" }
+
+# Another Invoke-Portscan.ps1 version from PowerShellMafia
+PowerShell Invoke-Portscan -Hosts 172.16.249.1/24 -Ports 22 -Threads 30 | Where { $_.Alive -eq "True" }
+
+Invoke-Portscan -Hosts 172.16.249.202 -Ports '22,80,443,445,1433,1435,3389,5985' -Threads 30
 Invoke-Portscan -Hosts 172.16.0.10 -TopPorts 50
 ```
 {% endcode %}

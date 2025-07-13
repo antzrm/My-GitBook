@@ -17,7 +17,7 @@ set URIPATH
 ## tcpdump
 
 {% hint style="danger" %}
-If we can use it on the target, generate traffic on all ports, not only on the one we are using to capture packets.
+IF WE ARE ROOT OR WE CAN USE IT ON THE TARGET, sniff all ports and try to generate traffic on all ports, not only on the one we are using to capture packets.
 {% endhint %}
 
 {% hint style="info" %}
@@ -28,6 +28,10 @@ In case there is a connection (FTP, SSH, whatever) on the target and we don't ha
 
 {% code overflow="wrap" fullWidth="true" %}
 ```bash
+tcpdump -i any -w capture.pcap -v -s0
+# IF ANY FAILS, choose a specific interface or try 2-3 of them
+###### NOTE: The -s ﬂag ensures that the packets are stored completely
+
 tcpdump -D # list interfaces
 tcpdump -v -i $INTERFACE port $PORT -w $FILE_TO_SAVE_THE_TRAFFIC
 sudo tcpdump -nvvvXi tun0 tcp port 8000 # capture traffic from tun0 interface on port 8000
@@ -80,6 +84,8 @@ https://dfirmadness.com/case-001-pcap-analysis/
 http://wiki.wireshark.org/CaptureFilters
 http://wiki.wireshark.org/DisplayFilters
 
+###### Look at Statistics > Endpoints to find a summary of which are the most relevant IPs, ports...
+
 # capture filters -> any packets that do not match the filter criteria will be dropped and the remaining data is passed on to the capture engine
 
 # The capture engine then dissects the incoming packets, analyzes them, and finally applies any additional display filters before displaying the output.
@@ -92,3 +98,8 @@ Follow TCP Stream
 ### Find strings in packets
 
 Go to Find in packets and select BYTES option for strings in order to locate strings within packets correctly.
+
+```bash
+# An easy way to look for strings
+strings file.pcap | grep -i password
+```

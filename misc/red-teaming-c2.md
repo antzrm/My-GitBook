@@ -63,6 +63,22 @@ WhoAmI
 
 ## Phishing
 
+### Social Engineering Toolkit
+
+{% code overflow="wrap" fullWidth="true" %}
+```bash
+https://github.com/trustedsec/social-engineer-toolkit
+
+We can use the Social Engineer Toolkit to set up a fake website and phish the users. 
+SEToolkit supports cloning pages and capturing incoming credentials. 
+Run setoolkit and select the options Social-Engineering Attacks > Website Attack Vectors > Credential Harvester Attack > Site Cloner . Next, enter your VPN IP address (e.g. 10.10.14.X) for incoming requests, followed by the login page URL:
+
+https://humongousretail.com/remote/auth/login.aspx
+
+# Then we can send emails using swaks
+```
+{% endcode %}
+
 ### Convincing Phishing Emails
 
 * Sender address from a significant brand, contact or cowoker. Use OSINT to suit it better to the destinatary.

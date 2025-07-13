@@ -10,6 +10,23 @@ For web applications, always consider as users both "admin" and otherwise also "
 **hashcat** > Retry without -O since that is discarding longer passwords
 {% endhint %}
 
+{% hint style="success" %}
+Try rockyou with **rules**, not only **best64** and **rockyou-30000** but also **d3ad0ne**.rule, T0XlC.rule, T0XlCv2.rule...
+{% endhint %}
+
+## kwprocessor (keyboard-walk processor)
+
+It's common for users to create passwords based on keyboard sequences such as qwertyuiop or qazxsw . A wordlist with such passwords can be generated using kwprocessor.
+
+{% code overflow="wrap" fullWidth="true" %}
+```bash
+https://github.com/hashcat/kwprocessor
+git clone ...
+make
+./kwp basechars/full.base keymaps/en-us.keymap routes/2-to-16-max-3-direction-changes.route > mykwplist.txt
+```
+{% endcode %}
+
 ## Collection of password lists
 
 [https://weakpass.com/](https://weakpass.com/)
